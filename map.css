@@ -1,0 +1,143 @@
+body {
+    font-family: 'Raleway', sans-serif;
+    display: flex;           /* Turn body into a flex container */
+    flex-direction: column;  /* Stack children vertically */
+}
+
+body::before {
+    content: "";
+    position: fixed; 
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    filter: blur(5px); 
+    z-index: -1;
+}
+
+#resultsContainer, #map {
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+#postalCode, #sportType {
+    max-width: 300px;
+}
+
+.mt-4 {
+    margin-top: 2rem !important;
+}
+
+.lifelike-input {
+    background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+    border: 1px solid #ccc;
+}
+
+.lifelike-input:focus {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid #aaa;
+}
+
+.lifelike-card {
+    background: white;
+    border: 1px solid #afafaf;
+    box-shadow: 0 4px 8px rgba(252, 252, 252, 0.1);
+    transition: box-shadow 0.3s;
+    max-width: 800px;
+    margin: 0 auto;
+    color: black;
+}
+
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;  
+    text-align: center;
+}
+
+.lifelike-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.lifelike-container {
+    background: linear-gradient(to bottom, #fff, #f6f6f6);
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s;
+}
+
+.lifelike-container:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.12);
+}
+
+#resultsContainer, #map {
+    height: 480px; /* Reduced height to account for padding */
+    overflow-y: auto;
+    padding: 10px; /* Added padding for a nicer look */
+}
+
+
+.text-large {
+    font-size: 1.5rem;
+}
+
+.vertical-navbar {
+    width: 60px;
+    position: fixed;
+    top: 10%;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+    font-size: 25px;
+}
+
+.vertical-navbar a {
+    position: relative;
+    text-align: center;
+    width: 70px;
+    height: 70px;
+    line-height: 50px;
+    margin-bottom: 20px;
+    color: #000;
+    background-color: gray;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vertical-navbar a:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid black;
+    transform: translateX(-50%);
+}
+
+.vertical-navbar a.active {
+    background-color: #333; /* or any other color you want for the active state */
+    color: #FFF;
+}
+
+footer{
+    margin-top: auto;
+}
+
+body, html {
+    height: 100%;  /* Make sure the body takes up the full height */
+    margin: 0;     /* Reset any default margin */
+}
+
+

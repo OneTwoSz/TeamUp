@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character set declaration for the document -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive design meta tag to control layout on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Webpage title -->
+    <title>Map - TeamUp</title>
+
+    <!-- Link to Bootstrap CSS for styling and layout -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Link to a custom stylesheet named "map.css" for additional styles -->
+    <link href="map.css" rel="stylesheet">
+
+    <!-- Link to the Google Maps API with a specified API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAazx-i1LaA8XAgHUMvSIkDLJJ8lxQzmoc"></script>
+
+    <!-- Link to Fonts  -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300&display=swap" rel="stylesheet">
+
+    <style>
+        /* Navigation Bar design*/
+        .nav-link.active {
+            color: #0d6efd !important;
+            text-decoration: underline;
+        }
+
+        .navbar-nav .nav-link {
+            position: relative;
+            text-decoration: none;
+            /* Optional: adding a transition on the color for a smoother hover effect. */
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%; /* Start from the center */
+            right: 50%; /* Start from the center */
+            height: 2px;
+            background-color: white;
+            transition: all 0.3s ease; /* Animate all properties for smoothness */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #0d6efd;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            left: 0;  /* Expand to full width */
+            right: 0; /* Expand to full width */
+        }
+    </style>
+ 
+</head>
+<body data-page="map">
+
+    <div class="vertical-navbar">
+        <a href="index.html">🏠</a>
+        <a href="tourguide.html">🏕️</a>
+        <a href="map.html">📍</a>
+        <a href="event.html">📅</a>
+    </div>
+    
+    <!-- Navbar section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+        <div class="container-fluid">
+            <!-- Logo Image -->
+            <a class="navbar-brand" href="index.html">
+                <img src="/images/TeamUp-logos_transparent.png" alt="Website Logo" height="40" class="d-inline-block align-top"> 
+                <!-- You can adjust the height value as per your requirements -->
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="tourguide.html">Tour Guide</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="map.html">Sports Club Finder</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="event.html">Event</a>
+                    </li>
+                    <!--
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="athletes.html">Athletes</a>
+                         -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main container for the Sports Club Finder feature -->
+    <div class="container centered-container mt-5">
+        <h1>Sports Club Finder</h1>
+        <p>Enter your postcode to find all nearby sportsclub</p>
+        
+        <!-- Postal Code Input Section -->
+        <div class="card lifelike-card">
+            <div class="card-body">
+                <form class="mt-4">
+                    <div class="mb-3">
+                        <label for="postalCode" class="form-label">Enter your 4-digit postal code:</label>
+                        <input type="text" class="form-control lifelike-input" id="postalCode" pattern="^\d{4}$" placeholder="1234" maxlength="4" required>
+                        <div class="form-text">Please enter a valid 4-digit postal code.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sportType" class="form-label">Choose a sport:</label>
+                        <select class="form-control lifelike-input" id="sportType">
+                            <option value="all">Any</option>
+                        </select>
+                    </div>
+
+                    <button type="find" class="btn btn-primary" onclick="showResultsAndScroll()">Find Sports Clubs in you area</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Container for showing results and a map -->
+    <div class="container mt-5" id="contentContainer" style="display: none;">
+        <div class="row">
+            <!-- Results Container -->
+            <div class="col-md-6">
+                <div id="resultsContainer" class="border lifelike-container">
+                    <ul id="resultsList"></ul>
+                </div>
+            </div>
+
+            <!-- Map Container -->
+            <div class="col-md-6">
+                <div id="map" class="border lifelike-container"></div>
+            </div>
+        </div>
+        <div class="container mt-5 mb-5 d-flex justify-content-center"> 
+            <div class="card text-center shadow" style="max-width: 400px;">
+                <div class="card-body">
+                    <h3 class="card-title">Find your favorite sports?</h3>
+                    <p class="card-text">Connect with local Events</p>
+                    <a href="event.html" class="btn btn-primary mt-3">Sport Event</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer section with copyright info -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row justify-content-center"> <!-- Centering the content -->
+                <!-- Quick Links -->
+                <div class="col-md-4 mx-3 text-center"> <!-- Reduced to col-md-4 and added horizontal margins with mx-3 -->
+                    <h4>Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white text-decoration-none">Home</a></li>
+                        <li><a href="tourguide.html" class="text-white text-decoration-none">Tour Guide</a></li>
+                        <li><a href="map.html" class="text-white text-decoration-none">Sports Club Finder</a></li>
+                        <li><a href="event.html" class="text-white text-decoration-none">Event</a></li>
+                    </ul>
+                </div>
+
+                <!-- Address and Contact -->
+                <div class="col-md-4 mx-3 text-center"> <!-- Reduced to col-md-4 and added horizontal margins with mx-3 -->
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope me-2"></i>info@teamup.com</p>
+                    
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p class="mb-0">© 2023 TeamUp. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<!-- Including Bootstrap's JS for interactivity and components functionality -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
+ <!-- Link to a custom JavaScript file named "map.js" -->
+<script src="map.js"></script>
+</body>
+</html>

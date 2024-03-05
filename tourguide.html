@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character set declaration for the document -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive design meta tag to control layout on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Webpage title -->
+    <title>Tour Guide - TeamUp</title>
+
+    <!-- Link to Bootstrap CSS for styling and layout -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Link to a custom stylesheet named "map.css" for additional styles -->
+    <link href="map.css" rel="stylesheet">
+
+    <!-- Link to the Google Maps API with a specified API key -->
+    
+    <!-- Link to a Google Font 'Roboto' with specific font weights (400, 500, 700) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300&display=swap" rel="stylesheet">
+
+
+
+    <!-- Link to the Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- link to Leaflet Routing Machine-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+            display: flex;           /* Turn body into a flex container */
+            flex-direction: column;  /* Stack children vertically */
+        }
+
+
+        /* Navigation Bar design*/
+        .nav-link.active {
+            color: #0d6efd !important;
+            text-decoration: underline;
+        }
+
+        .navbar-nav .nav-link {
+            position: relative;
+            text-decoration: none;
+            /* Optional: adding a transition on the color for a smoother hover effect. */
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%; /* Start from the center */
+            right: 50%; /* Start from the center */
+            height: 2px;
+            background-color: white;
+            transition: all 0.3s ease; /* Animate all properties for smoothness */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #0d6efd;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            left: 0;  /* Expand to full width */
+            right: 0; /* Expand to full width */
+        }
+
+        .vertical-navbar {
+            width: 60px;
+            position: fixed;
+            top: 10%;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+            font-size: 25px;
+        }
+
+        .vertical-navbar a {
+            position: relative;
+            text-align: center;
+            width: 70px;
+            height: 70px;
+            line-height: 50px;
+            margin-bottom: 20px;
+            color: #000;
+            background-color: gray;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vertical-navbar a:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 10px solid black;
+            transform: translateX(-50%);
+        }
+
+        .vertical-navbar a.active {
+            background-color: #333; /* or any other color you want for the active state */
+            color: #FFF;
+        }
+
+        footer{
+            margin-top: auto;
+        }
+
+        .content-wrapper {
+            flex: 1;                 /* Allow this wrapper to expand and push the footer down */
+        }
+
+        body, html {
+            height: 100%;  /* Make sure the body takes up the full height */
+            margin: 0;     /* Reset any default margin */
+        }
+
+        body {
+            display: flex;           /* Turn body into a flex container */
+            flex-direction: column;  /* Stack children vertically */
+        }
+
+        .card {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover, .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #locationModal {
+            z-index: 1000; 
+            
+        }
+
+        #routeDescription {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .square-card {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            background-color: #e0f7fa;
+            cursor: pointer;
+        }
+
+    </style>
+
+ 
+</head>
+<body data-page="tourguide">
+    <div class="content-wrapper">
+
+    <div class="vertical-navbar">
+        <a href="index.html">🏠</a>
+        <a href="tourguide.html">🏕️</a>
+        <a href="map.html">📍</a>
+        <a href="event.html">📅</a>
+    </div>
+
+    <!-- Navbar section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+        <div class="container-fluid">
+            <!-- Logo Image -->
+            <a class="navbar-brand" href="index.html">
+                <img src="/images/TeamUp-logos_transparent.png" alt="Website Logo" height="40" class="d-inline-block align-top"> 
+               
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="tourguide.html">Tour Guide</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="map.html">Sports Club Finder</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="event.html">Event</a>
+                    </li>
+                    <!--
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="athletes.html">Athletes</a>
+                         -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<!-- Main content container -->
+<div class="container mt-5 text-center">
+    <h1>Sport Tour Guide</h1>
+</div>
+
+    <!-- Main content -->
+    <div class="container">
+        <br><h4 class="text-center">Discover famous sporting landmarks in Melbourne through a personalised tour guide</h4>
+        <h6 class="text-center">Click on a sport below to get five random landmarks for you to discover Melbourne!</h6>
+        <div class="card large-card bg-transparent border-0">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card border-1 bg-transparent" style="width: 10rem;" onclick="showTourGuide(1); document.getElementById('tourGuide').scrollIntoView({behavior: 'smooth'});">
+                        <img src="images/vector_sport_1.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">AFL</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-1 bg-transparent" style="width: 10rem;" onclick="showTourGuide(2); document.getElementById('tourGuide').scrollIntoView({behavior: 'smooth'});">
+                        <img src="images/vector_sport_2.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Tennis</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-1 bg-transparent" style="width: 10rem;" onclick="showTourGuide(3); document.getElementById('tourGuide').scrollIntoView({behavior: 'smooth'});">
+                        <img src="images/vector_sport_4.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Cricket</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-1 bg-transparent" style="width: 10rem;" onclick="showTourGuide(4); document.getElementById('tourGuide').scrollIntoView({behavior: 'smooth'});">
+                        <img src="images/vector_sport_5.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Soccer</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tourGuide" style="display:none">
+            <h3 class="text-center">Tour Guide for <span id="selectedSport"></span></h3>
+            <div id="map"></div>
+            
+            <div class="text-center mt-3">
+                <table id="routeDescriptionTable" class="table table-bordered">
+                    <thead>
+                        <tr>
+   
+                        </tr>
+                    </thead>
+                    <tbody id="routeDescription"></tbody>
+                </table>                
+            </div>
+            <div id="locationModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 id="modalTitle"></h2>
+                    <p id="modalDescription"></p>
+                </div>
+            </div>
+            <div class="container mt-5 mb-5 d-flex justify-content-center"> 
+                <div class="card text-center shadow" style="max-width: 400px;">
+                    <div class="card-body">
+                        <h3 class="card-title">Want to play the sports?</h3>
+                        <p class="card-text">Find your nearby sports club to play</p>
+                        <a href="map.html" class="btn btn-primary mt-3">Sport Club Finder</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    
+
+    
+
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row justify-content-center"> <!-- Centering the content -->
+                <!-- Quick Links -->
+                <div class="col-md-4 mx-3 text-center"> <!-- Reduced to col-md-4 and added horizontal margins with mx-3 -->
+                    <h4>Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white text-decoration-none">Home</a></li>
+                        <li><a href="tourguide.html" class="text-white text-decoration-none">Tour Guide</a></li>
+                        <li><a href="map.html" class="text-white text-decoration-none">Sports Club Finder</a></li>
+                        <li><a href="event.html" class="text-white text-decoration-none">Event</a></li>
+                    </ul>
+                </div>
+
+                <!-- Address and Contact -->
+                <div class="col-md-4 mx-3 text-center"> <!-- Reduced to col-md-4 and added horizontal margins with mx-3 -->
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope me-2"></i>info@teamup.com</p>
+                    
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p class="mb-0">© 2023 TeamUp. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tourGuideNumber = urlParams.get('tourGuide');
+            
+            if (tourGuideNumber) {
+                // Use the 'tourGuide' parameter to find the right button using the 'onclick' attribute
+                const button = document.querySelector(`.btn-primary[onclick^="showTourGuide(${tourGuideNumber});"]`);
+
+                if (button) {
+                    button.click();
+                } else {
+                    console.error(`Button for tour guide ${tourGuideNumber} not found!`);
+                }
+            }
+        });
+
+        // Identify the current page from the URL
+        const currentPage = window.location.pathname.split("/").pop();
+
+        // Loop through all navbar links
+        document.querySelectorAll(".nav-link").forEach(link => {
+            // If the href of the link matches the current page, add the 'active' class
+            if (link.getAttribute("href") === currentPage) {
+                link.classList.add("active");
+            } else {
+                link.classList.remove("active");
+            }
+        });
+
+        var map = L.map('map').setView([-37.7840864379557, 144.961967841559], 13);
+        var markers = L.layerGroup().addTo(map);
+        var routeControl;
+        
+        function initMap() {
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        }
+
+        async function showTourGuide(sportNumber) {
+            document.getElementById('tourGuide').style.display = 'block';
+            var sports = ['AFL', 'Tennis', 'Cricket', 'Soccer', ];
+            var selectedSport = sports[sportNumber - 1];
+            console.log(selectedSport)
+            document.getElementById('selectedSport').textContent = selectedSport;
+            document.getElementById('routeDescription').textContent = 'Fetching route information for ' + selectedSport + '...';
+
+            map.invalidateSize();
+            // Clear any existing markers and routes
+            markers.clearLayers();
+            if (routeControl) {
+                map.removeControl(routeControl);
+            }
+
+      
+
+            try {
+                const response = await fetch('https://002m4iemh4.execute-api.ap-southeast-2.amazonaws.com/touguide/dbresource2', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sport: selectedSport })
+                });
+
+                const result = await response.json();
+                console.log('Response from AWS Lambda:', result);
+                const locations = result;
+
+                // Initialize routeDescription
+                let routeDescriptionText = '';;
+
+                if (!locations) {
+                    document.getElementById('routeDescription').textContent = 'No locations found for ' + selectedSport + '.';
+                    return;
+                }
+
+                document.getElementById('routeDescription').innerHTML = 'Found ' + locations.length + ' locations for ' + selectedSport + '.' + '<br>';
+
+                // Remove any existing markers from the layer group
+                markers.clearLayers();
+
+                var routeWaypoints = [];
+
+                // Loop through each location and add a marker to the layer group
+                locations.forEach(function(location) {
+                    var coordinates = location['Co-ordinates'].split(', ').map(parseFloat);
+                    var latlng = L.latLng(coordinates[0], coordinates[1]);
+                    routeWaypoints.push(latlng);
+                    var marker = L.marker(coordinates);
+                    marker.bindPopup('<b>' + location['Feature Name'] + '</b>');
+                    markers.addLayer(marker);
+                    console.log(location)
+                    console.log(location.Description)
+                    routeDescriptionText += '<tr><td>' + location['Feature Name'] + '</td><td>' + location.Description + '</td></tr>';
+                    var card = document.createElement("div");
+                    card.className = "card square-card";
+                    card.innerHTML = '<b>' + location['Feature Name'] + '</br>' + location['Theme'] + '</b>';
+                    card.onclick = function() {
+                        document.getElementById('modalTitle').textContent = location['Feature Name'];
+                        document.getElementById('modalDescription').textContent = 'Description: ' + location.Description;
+                        document.getElementById('locationModal').style.display = "block";
+                    };
+
+                    document.getElementById('routeDescription').appendChild(card);
+                    var modal = document.getElementById('locationModal');
+                    var span = document.getElementsByClassName("close")[0];
+
+                    span.onclick = function() {
+                        modal.style.display = "none";
+                    };
+
+                    window.onclick = function(event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    };
+                });
+                //document.getElementById('routeDescription').innerHTML = routeDescriptionText;
+
+                routeControl = L.Routing.control({
+                    waypoints: routeWaypoints,
+                    lineOptions: {
+                        styles: [{color: 'blue', opacity: 1, weight: 3}]
+                    },
+                    addWaypoints: false,
+                    draggableWaypoints: false,
+                    fitSelectedRoutes: true,
+                    showAlternatives: false,
+                    createMarker: createCustomMarker // add this line to use the custom marker function
+                }).addTo(map);
+
+
+                // Center the map on the first location
+                if (locations.length > 0) {
+                    var firstCoordinates = locations[0]['Co-ordinates'].split(', ').map(parseFloat);
+                    map.setView(firstCoordinates, 13);
+                }
+
+            } catch (error) {
+                console.error('Error sending data to AWS Lambda:', error);
+                document.getElementById('routeDescription').textContent = 'An error occurred while fetching route information for ' + selectedSport + ', ' + 'refresh the page and retry.';
+            }
+      
+        }
+
+        function createCustomMarker(i, wp, nWps) {
+            if (i === 0) {
+                // This is the start marker
+                return L.marker(wp.latLng, {
+                    icon: L.divIcon({
+                        className: 'custom-start-icon',
+                        html: '<div style="background-color:green;border-radius:50%;width:25px;height:25px;line-height:25px;text-align:center;color:white;">S</div>',
+                        iconSize: [25, 25]
+                    })
+                });
+            } else if (i === nWps - 1) {
+                // This is the end marker
+                return L.marker(wp.latLng, {
+                    icon: L.divIcon({
+                        className: 'custom-end-icon',
+                        html: '<div style="background-color:red;border-radius:50%;width:25px;height:25px;line-height:25px;text-align:center;color:white;">E</div>',
+                        iconSize: [25, 25]
+                    })
+                });
+            } else {
+                // This is a middle waypoint, return null to skip marker creation
+                return null;
+            }
+        }
+
+        window.onload = initMap;
+        
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var currentPage = document.body.getAttribute('data-page');
+            var navbarItems = document.querySelectorAll('.vertical-navbar a');
+        
+            // Highlight index by default
+            navbarItems[0].classList.add('active');
+        
+            if (currentPage === "tourguide") {
+                navbarItems[1].classList.add('active');
+            } else if (currentPage === "map") {
+                navbarItems[1].classList.add('active');
+                navbarItems[2].classList.add('active');
+            } else if (currentPage === "event") {
+                navbarItems[1].classList.add('active');
+                navbarItems[2].classList.add('active');
+                navbarItems[3].classList.add('active');
+            }
+        });
+    </script>
+    
+</body>
+</html>

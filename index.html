@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character set declaration for the document -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive design meta tag to control layout on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Webpage title -->
+    <title>TeamUp</title>
+
+    <!-- Link to Bootstrap CSS for styling and layout -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Link to Fonts  -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300&display=swap" rel="stylesheet">
+
+    <!-- Swiper CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+
+
+    <!-- Internal CSS styles -->
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+        }
+
+        /* Navigation Bar design*/
+        .nav-link.active {
+            color: #0d6efd !important;
+            text-decoration: underline;
+        }
+
+        .navbar-nav .nav-link {
+            position: relative;
+            text-decoration: none;
+            /* Optional: adding a transition on the color for a smoother hover effect. */
+            transition: color 0.3s ease;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%; /* Start from the center */
+            right: 50%; /* Start from the center */
+            height: 2px;
+            background-color: white;
+            transition: all 0.3s ease; /* Animate all properties for smoothness */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #0d6efd;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            left: 0;  /* Expand to full width */
+            right: 0; /* Expand to full width */
+        }
+
+        .text-large {
+            font-size: 1.5rem;
+        }
+
+        .slogan-section {
+            background-color: #222;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 3rem 1rem;
+            text-align: center;
+            color: white;
+            background-size: cover;
+            background-position: center;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.5);
+            min-height: 80vh;
+            max-height: 80vh;
+            display: flex;
+            justify-content: flex-end; /* Aligns the card to the right */
+            align-items: center;       /* Vertically centers the card */
+            flex-direction: row;       /* Lays out the card horizontally */
+        }
+
+        .slogan-card {
+            max-width: 60%; /* Adjust the width of the card as needed */
+            padding: 2rem;
+            background-color: #222; /* Slightly transparent white background */
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            top: 0;
+            left: 150px;
+        }
+
+        .col-md-6 img.img-fluid {
+            width: auto;            /* Adjust the width as desired */
+            height: auto;          /* Maintains aspect ratio */
+            margin-left: 5%;      /* Horizontal centering with 10% margin on each side (because width is 80%) */
+            margin-top: -150px;      /* Adjust to push image down by desired amount */
+        }
+
+        .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .col-md-6 {
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+
+        .img-3d-effect {
+            border: 2px solid #f0f0f0; /* Optional: You can adjust the border color and width */
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); /* Shadow to give 3D effect */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+        }
+
+        .img-3d-effect:hover {
+            transform: translateY(-10px); /* Move the image slightly upwards */
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4); /* Increase shadow depth for hover */
+        }
+
+        
+        @keyframes jumpInfinite {
+            0% {
+                margin-top: 0;
+            }
+            50% {
+                margin-top: 20px;
+            }
+            100% {
+                margin-top: 0;
+            }
+        }
+
+        /* Feature Cards Styling */
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card img {
+            max-height: 200px; /* Adjust based on your image size and design preference */
+        }
+
+        .feature-card h5, .feature-card p {
+            color: #333; /* Dark color for the text */
+        }
+        .swiper {
+            width: auto;
+            height: auto;
+        }
+
+        .card-img-top {
+                width: 100%; 
+                height: 200px;    
+                object-fit: scale-down; 
+                overflow: hidden;  
+        }
+
+        footer{
+            margin-top: auto;
+        }
+        
+        .vertical-navbar a.active {
+            background-color: #333; /* or any other color you want for the active state */
+            color: #FFF;
+        }
+
+
+
+        @media (max-width: 767.98px) {
+            .slogan-card {
+                max-width: 100%; /* Allows the card to take full width on small screens */
+                position: relative;
+                top: 0;          /* Reset the top offset on small screens */
+                left: 0;         /* Reset the left offset on small screens */
+                margin: 1rem 0;  /* Add some margin for spacing */
+            }
+
+            .slogan-section {
+                flex-direction: column-reverse; /* Stack the slogan above the image */
+            }
+
+            .col-md-6 img.img-fluid {
+                margin-left: auto;  /* Center the image horizontally */
+                margin-right: auto; /* Center the image horizontally */
+                margin-top: 0;      /* Reset the margin-top value for mobile view */
+                display: block;     /* Ensures the image is centered */
+            }
+
+            .col-md-6 {
+                padding-left: 15px;  /* Reduce padding on small screens */
+                padding-right: 15px; /* Reduce padding on small screens */
+            }
+        }
+
+
+        .vertical-navbar {
+            width: 60px;
+            position: fixed;
+            top: 10%;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+            font-size: 25px;
+        }
+
+        .vertical-navbar a {
+            position: relative;
+            text-align: center;
+            width: 70px;
+            height: 70px;
+            line-height: 50px;
+            margin-bottom: 20px;
+            color: #000;
+            background-color: gray;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vertical-navbar a:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 10px solid black;
+            transform: translateX(-50%);
+        }
+
+        .modal-backdrop {
+            z-index: 1050 !important;
+        }
+
+        .modal {
+            z-index: 1060 !important;
+        }
+
+        /* Make sure the swiper container is set to relative positioning */
+        .swiper {
+            position: relative;
+        }
+
+        /* Adjust the next button position */
+        .swiper-button-next {
+            position: absolute;
+            top: 50%;                   /* Center vertically */
+            right: calc(50% - 300px);   /* Adjust this value based on your card width and desired button position */
+            transform: translateY(-50%); /* Center vertically */
+        }
+
+        /* Adjust the prev button position */
+        .swiper-button-prev {
+            position: absolute;
+            top: 50%;                   /* Center vertically */
+            left: calc(50% - 300px);    /* Adjust this value based on your card width and desired button position */
+            transform: translateY(-50%); /* Center vertically */
+        }
+
+
+        @keyframes buttonScale {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            animation: buttonScale 1.5s infinite;
+        }
+        
+        .card.feature-card:hover {
+            cursor: pointer;
+        }
+
+        .ourstoryimg {
+            width: 40%;
+            height: 40%;
+        }
+
+
+
+    </style>
+</head>
+
+<body data-page="index">
+    
+    <!-- Vertical Navbar with Progress -->
+    <div class="vertical-navbar">
+        <a href="index.html">🏠</a>
+        <a href="tourguide.html">🏕️</a>
+        <a href="map.html">📍</a>
+        <a href="event.html">📅</a>
+    </div>
+    
+    <!-- Navbar section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+        <div class="container-fluid">
+            <!-- Logo Image -->
+            <a class="navbar-brand" href="index.html">
+                <img src="/images/TeamUp-logos_transparent.png" alt="Website Logo" height="40" class="d-inline-block align-top"> 
+            </a>
+    
+            <!-- Toggler Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="tourguide.html">Tour Guide</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="map.html">Sports Club Finder</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="event.html">Event</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    
+
+    <!-- Slogan section -->
+    <section class="slogan-section bg-dark">
+        <div class="row"> <!-- Begin Bootstrap row -->
+
+            <!-- Image on the left -->
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <!-- Update the 'src' attribute with the path to your desired image -->
+                <img src="/images/landing_2.jpg" alt="landing_2" class="img-fluid img-3d-effect">
+            </div>
+
+            <!-- Slogan card on the right -->
+            <div class="col-md-6">
+                <div class="slogan-card">
+                    <h1>Bridging cultures through sports</h1>
+                    <p>Find sporting clubs, friends, activities and events. </p>
+                    <a class="btn btn-primary mt-3" onclick="document.getElementById('features-section').scrollIntoView({behavior: 'smooth'});">Getting Started</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="container mt-5 text-center">
+        <h2>Key Feature</h2>
+        <hr class="w-50 mx-auto">
+    </div>
+
+    <!-- Feature Cards Section -->
+    <div class="container mt-5" id="features-section">
+        <div class="row">
+            <!-- Feature 1 -->
+            <div class="col-md-4 mb-4">
+                <a href="tourguide.html" class="text-decoration-none">
+                    <div class="card feature-card h-100">
+                        <img src="images/icon_tour.jpg" class="card-img-top" alt="Feature 1 Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Sport Tour Guide</h5>
+                            <p class="card-text">Discover new destinations through the lens of your favorite sports</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="col-md-4 mb-4">
+                <a href="map.html" class="text-decoration-none">
+                    <div class="card feature-card h-100">
+                        <img src="images/icon_map.jpg" class="card-img-top" alt="Feature 2 Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Sport Club Finder</h5>
+                            <p class="card-text">Find a sports club in your vicinity and meet new friends</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="col-md-4 mb-4">
+                <a href="event.html" class="text-decoration-none">
+                    <div class="card feature-card h-100">
+                        <img src="images/icon_event.jpg" class="card-img-top" alt="Feature 3 Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Sport Event</h5>
+                            <p class="card-text">Discover the latest sports events and connect with enthusiasts</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5 text-center">
+        <h2>Popular Sports</h2>
+        <hr class="w-50 mx-auto">
+    </div>
+
+    <!-- Swiper container -->
+    <div class="swiper" >
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+          <!-- Slides -->
+          <div class="swiper-slide">
+            <div class="row justify-content-center">
+                <div class="col-md-3 mb-4">
+                    <!-- Card -->
+                    <div class="card feature-card h-100" data-bs-toggle="modal" data-bs-target="#sport1Modal">
+                        <img src="images/AFL_logo.jpg" class="card-img-top" alt="Sport 1 Image">
+                        <div class="card-body">
+                            <h5 class="card-title">AFL</h5>
+                            <p class="card-text">A True Aussie Classic</p>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="row justify-content-center">
+                <div class="col-md-3 mb-4">
+                    <div class="card feature-card h-100" data-bs-toggle="modal" data-bs-target="#sport2Modal">
+                        <img src="images/tennis_logo.jpg" class="card-img-top" alt="Sport 1 Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Tennis</h5>
+                            <p class="card-text">A Riveting Court Duel</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="row justify-content-center">
+                <div class="col-md-3 mb-4">
+                    <div class="card feature-card h-100" data-bs-toggle="modal" data-bs-target="#sport3Modal">
+                        <img src="images/cricket_logo.jpg" class="card-img-top" alt="Sport 1 Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Cricket</h5>
+                            <p class="card-text">A Gentleman's Game</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="row justify-content-center">
+                <div class="col-md-3 mb-4">
+                    <div class="card feature-card h-100" data-bs-toggle="modal" data-bs-target="#sport4Modal">
+                        <img src="images/football_logo.jpg" class="card-img-top" alt="Sport 1 Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Soccer</h5>
+                            <p class="card-text">The Beautiful Game</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="sport1Modal" tabindex="-1" aria-labelledby="sport1ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sport1ModalLabel">AFL</h5>
+                    <a href="tourguide.html?tourGuide=1" class="btn btn-primary ms-auto">Tour Guide</a> 
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="images/AFL_1.jpg" alt="Description Image" class="img-fluid mb-3"> 
+                    <h6>A True Aussie Classic</h6>
+                    <p>AFL, a treasured Australian pastime, combines dynamic action with a vibrant sporting culture. From soaring marks to thrilling goals, 
+                        it's a game that encapsulates Aussie grit and spirit, uniting fans in a spectacular celebration of athleticism and team loyalty.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="sport2Modal" tabindex="-1" aria-labelledby="sport2ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sport1ModalLabel">Tennis</h5>
+                    <a href="tourguide.html?tourGuide=2" class="btn btn-primary ms-auto">Tour Guide</a> 
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="images/Tennis_1.jpg" alt="Description Image" class="img-fluid mb-3"> 
+                    <h6>A Riveting Court Duel</h6>
+                    <p>Tennis, a captivating game of speed and skill, sets the stage for exhilarating one-on-one battles. From swift serves to tactical volleys, 
+                        it's a sport that enthrals spectators with its mix of precision, power, and poised elegance, creating moments that linger in fans' memories. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="sport3Modal" tabindex="-1" aria-labelledby="sport3ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sport1ModalLabel">Cricket</h5>
+                    <a href="tourguide.html?tourGuide=3" class="btn btn-primary ms-auto">Tour Guide</a> 
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="images/Cricket_1.jpg" alt="Description Image" class="img-fluid mb-3"> 
+                    <h6>A Gentleman's Game</h6>
+                    <p>Cricket, often hailed as a gentleman's game, weaves a tapestry of competitive spirit and camaraderie. From swift bowling to strategic batting, 
+                        it's a sport where precision meets passion, capturing the hearts of enthusiasts worldwide.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="sport4Modal" tabindex="-1" aria-labelledby="sport4ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sport1ModalLabel">Soccer</h5>
+                    <a href="tourguide.html?tourGuide=4" class="btn btn-primary ms-auto">Tour Guide</a> 
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="images/football_1.jpg" alt="Description Image" class="img-fluid mb-3"> 
+                    <h6>The Beautiful Game</h6>
+                    <p>Soccer, universally celebrated as the beautiful game, enthrals millions with its fluidity and finesse. From spectacular goals to the pulsating energy of fans, 
+                        it's more than a sport—it's a global language spoken through skilled manoeuvres and strategic plays.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Introductory content about TeamUpMel -->
+    <div class="container mt-5 text-center">
+        <h2>Our Goal</h2>
+        <hr class="w-50 mx-auto">
+        <p>At TeamUp, we believe in the unique power of sports to bridge cultural divides, bringing us all closer together. Regardless of where you hail from, the magic of a ball, a match, or a friendly competition can break down barriers of language and culture.</p>
+        <img src="/images/landing_1.jpg" alt="landing_1" class="img-fluid img-3d-effect ourstoryimg">
+    </div>
+    
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row justify-content-center"> <!-- Centering the content -->
+                <!-- Quick Links -->
+                <div class="col-md-4 mx-3 text-center"> <!-- Reduced to col-md-4 and added horizontal margins with mx-3 -->
+                    <h4>Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white text-decoration-none">Home</a></li>
+                        <li><a href="tourguide.html" class="text-white text-decoration-none">Tour Guide</a></li>
+                        <li><a href="map.html" class="text-white text-decoration-none">Sports Club Finder</a></li>
+                        <li><a href="event.html" class="text-white text-decoration-none">Event</a></li>
+                    </ul>
+                </div>
+
+                <!-- Address and Contact -->
+                <div class="col-md-4 mx-3 text-center"> <!-- Reduced to col-md-4 and added horizontal margins with mx-3 -->
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope me-2"></i>info@teamup.com</p>
+                    
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p class="mb-0">© 2023 TeamUp. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+
+</body>
+</html>
+
+    <!-- Including Bootstrap's JS for interactivity and components functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() { // Ensure DOM is fully loaded
+    const swiper = new Swiper('.swiper', {
+        direction: 'horizontal', // Horizontal direction
+        loop: true,              // Loop mode
+   
+        // Add navigation
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+});
+    </script>
+
+    <script>
+        function scrollToBottom() {
+            window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var currentPage = document.body.getAttribute('data-page');
+            var navbarItems = document.querySelectorAll('.vertical-navbar a');
+
+            // Highlight index by default
+            navbarItems[0].classList.add('active');
+
+            if (currentPage === "tourguide") {
+                navbarItems[1].classList.add('active');
+            } else if (currentPage === "map") {
+                navbarItems[1].classList.add('active');
+                navbarItems[2].classList.add('active');
+            } else if (currentPage === "event") {
+                navbarItems[1].classList.add('active');
+                navbarItems[2].classList.add('active');
+                navbarItems[3].classList.add('active');
+            }
+        });
+
+    </script>
+</body>
+
+</html>

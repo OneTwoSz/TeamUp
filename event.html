@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character set declaration for the document -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive design meta tag to control layout on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Webpage title -->
+    <title>Sports Event - TeamUp</title>
+
+    <!-- Link to Bootstrap CSS for styling and layout -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Link to Google Fonts for Roboto font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS styles -->
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+            display: flex;           /* Turn body into a flex container */
+            flex-direction: column;  /* Stack children vertically */
+        }
+
+        body::before {
+            content: "";
+            position: fixed; 
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px); 
+            z-index: -1;
+        }
+        /* Navigation Bar design*/
+        .nav-link.active {
+            color: #0d6efd !important;
+            text-decoration: underline;
+        }
+
+        .navbar-nav .nav-link {
+            position: relative;
+            text-decoration: none;
+            /* Optional: adding a transition on the color for a smoother hover effect. */
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%; /* Start from the center */
+            right: 50%; /* Start from the center */
+            height: 2px;
+            background-color: white;
+            transition: all 0.3s ease; /* Animate all properties for smoothness */
+        }
+        .navbar-nav .nav-link:hover {
+            color: #0d6efd;
+        }
+        .navbar-nav .nav-link:hover::after {
+            left: 0;  /* Expand to full width */
+            right: 0; /* Expand to full width */
+        }
+        .text-large {
+            font-size: 1.5rem;
+        }
+        .event-image {
+            display: block;
+            height: 100%; 
+            width: 100%; 
+            object-fit: cover;
+        }
+        .vertical-navbar {
+            width: 60px;
+            position: fixed;
+            top: 10%;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+            font-size: 25px;
+        }
+        .vertical-navbar a {
+            position: relative;
+            text-align: center;
+            width: 70px;
+            height: 70px;
+            line-height: 50px;
+            margin-bottom: 20px;
+            color: #000;
+            background-color: gray;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vertical-navbar a:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 10px solid black;
+            transform: translateX(-50%);
+        }
+        .vertical-navbar a.active {
+            background-color: #333; 
+            color: #FFF;
+        }
+
+        footer{
+            margin-top: auto;
+        }
+
+        body, html {
+            height: 100%;  
+            margin: 0;     
+        }
+        .container h1, .container h2 {
+            text-align: center;
+        }
+        .form-select-lg {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.3rem;
+        }
+        
+        #selectSport {
+            padding: 10px 35px;
+        }
+        .lifelike-input {
+            background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+            border: 1px solid #ccc;
+        }
+
+        .lifelike-input:focus {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #aaa;
+        }
+
+        .lifelike-card {
+            background: white;
+            border: 1px solid #a8a8a8;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+            max-width: 800px;
+            margin: 0 auto;
+            color: black;
+        }
+
+        .centered-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body data-page="event">
+
+    <!-- Vertical Navbar with Progress -->
+    <div class="vertical-navbar">
+        <a href="index.html">🏠</a>
+        <a href="tourguide.html">🏕️</a>
+        <a href="map.html">📍</a>
+        <a href="event.html">📅</a>
+    </div>
+
+    <!-- Navbar section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+        <div class="container-fluid">
+            <!-- Logo Image -->
+            <a class="navbar-brand" href="index.html">
+                <img src="/images/TeamUp-logos_transparent.png" alt="Website Logo" height="40" class="d-inline-block align-top"> 
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="tourguide.html">Tour Guide</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="map.html">Sports Club Finder</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-large" href="event.html">Event</a>
+                    </li>
+                
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content container -->
+    <div class="container centered-container mt-5">
+        <h1>Sports Event Finder</h1>
+        <p>Select your sport to find related events</p>
+        <div class="container mt-5 d-flex flex-column align-items-center">
+            <div class="card lifelike-card" style="width: 18rem;"> 
+                <div class="card-body"> 
+                    <label for="sport" class="form-label text-center">Select a Sport</label>
+                    <div class="form-group mb-3 text-center">
+                        <select id="selectSport" class="form-select form-select-lg mb-2">
+                            <option value="soccer">Soccer</option>
+                            <option value="basketball">Basketball</option>
+                            <option value="tennis">Tennis</option>
+                            <option value="cricket">Cricket</option>
+                        </select>
+                        <button onclick="fetchMatches()" class="btn btn-primary btn-block">Search Event</button>
+                    </div>
+                    
+                </div> 
+            </div>
+        </div>   
+        <div id="matchesInfo"></div>     
+    </div>
+    
+
+</body>
+
+
+
+<!-- Container for the sports event cards
+<div class="container mt-5">
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-2">
+                <img src="/images/sports_2.jpg" alt="Event Image 1" class="img-fluid event-image">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal">Great Ocean Road Cycling Marathon</a>
+                    </h5>
+                    <p class="card-text">Embark on a thrilling cycling adventure along the iconic Great Ocean Road! Open to both beginners and seasoned riders, this event celebrates community spirit, physical fitness, and the mesmerizing coastal scenery of Victoria. Rejuvenate with a coastal brunch at the finish line.</p>
+                    <p class="card-text"><small class="text-muted">Date: September 15, 2023</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-2">
+                <img src="/images/sports_3.jpg" alt="Event Image 2" class="img-fluid event-image">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal">Forest Yoga Immersion</a>
+                    </h5>
+                    <p class="card-text">Immerse yourself in tranquillity with our Forest Yoga session set amidst the lush greenery of the Dandenong Ranges. This retreat combines meditation, yoga postures, and breathing exercises to rejuvenate both the body and mind. Remember to bring your yoga mat and a sense of peace!</p>
+                    <p class="card-text"><small class="text-muted">Date: October 7, 2023</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-2">
+                <img src="/images/sports_4.jpg" alt="Event Image 3" class="img-fluid event-image">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal">Ballarat Heritage Run</a>
+                    </h5>
+                    <p class="card-text">Lace up for a scenic run through Ballarat's historic landmarks and streets! Suitable for participants of all skill levels, this event offers different race categories and distances. After the run, enjoy a community breakfast and celebrate the rich history of Ballarat.</p>
+                    <p class="card-text"><small class="text-muted">Date: October 13, 2023</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">Event Title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Description:</strong> Embark on a thrilling cycling adventure along the iconic Great Ocean Road! Open to both beginners and seasoned riders, this event celebrates community spirit, physical fitness, and the mesmerizing coastal scenery of Victoria. Rejuvenate with a coastal brunch at the finish line.</p>
+                <p><strong>Location:</strong> Torquay and ending at Apollo Bay</p>
+                <p><strong>Time Duration:</strong> 2:00 PM - 5:00 PM</p>
+                <p><strong>Contact Name:</strong> John Doe</p>
+                <p><strong>Contact Number:</strong> +1234567890</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- Footer section with copyright info -->
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row justify-content-center"> <!-- Centering the content -->
+            <!-- Quick Links -->
+            <div class="col-md-4 mx-3 text-center"> <!-- Reduced to col-md-4 and added horizontal margins with mx-3 -->
+                <h4>Quick Links</h4>
+                <ul class="list-unstyled">
+                    <li><a href="index.html" class="text-white text-decoration-none">Home</a></li>
+                    <li><a href="tourguide.html" class="text-white text-decoration-none">Tour Guide</a></li>
+                    <li><a href="map.html" class="text-white text-decoration-none">Sports Club Finder</a></li>
+                    <li><a href="event.html" class="text-white text-decoration-none">Event</a></li>
+                </ul>
+            </div>
+
+            <!-- Address and Contact -->
+            <div class="col-md-4 mx-3 text-center"> <!-- Reduced to col-md-4 and added horizontal margins with mx-3 -->
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope me-2"></i>info@teamup.com</p>
+                
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="row mt-3">
+            <div class="col text-center">
+                <p class="mb-0">© 2023 TeamUp. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+<script src="fixtures.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var currentPage = document.body.getAttribute('data-page');
+        var navbarItems = document.querySelectorAll('.vertical-navbar a');
+    
+        // Highlight index by default
+        navbarItems[0].classList.add('active');
+    
+        if (currentPage === "tourguide") {
+            navbarItems[1].classList.add('active');
+        } else if (currentPage === "map") {
+            navbarItems[1].classList.add('active');
+            navbarItems[2].classList.add('active');
+        } else if (currentPage === "event") {
+            navbarItems[1].classList.add('active');
+            navbarItems[2].classList.add('active');
+            navbarItems[3].classList.add('active');
+        }
+    });
+</script>
+
+<!-- Including Bootstrap's JS for interactivity and components functionality -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Identify the current page from the URL
+    const currentPage = window.location.pathname.split("/").pop();
+
+    // Loop through all navbar links
+    document.querySelectorAll(".nav-link").forEach(link => {
+        // If the href of the link matches the current page, add the 'active' class
+        if (link.getAttribute("href") === currentPage) {
+            link.classList.add("active");
+        } else {
+            link.classList.remove("active");
+        }
+    });
+
+
+
+</script>
+</body>
+</html>
